@@ -20,7 +20,6 @@ AGENTS.md                     # Ce contexte projet
 _templates/article-template.md
 articles/<sujet>/README.md    # Un dossier par article
 skills/<skill>/SKILL.md        # Skills du projet (voir ci-dessous)
-.claude/skills/<skill>/SKILL.md  # Copie pour découverte automatique CLI
 ```
 
 Règles de structure :
@@ -53,12 +52,12 @@ Règles de structure :
 
 ## Skills disponibles
 
-Deux skills normalisés (format Agent Skills : YAML frontmatter `name` + `description` en en-tête de `SKILL.md`) sont disponibles dans `skills/` et dupliqués dans `.claude/skills/` :
+Deux skills normalisés (format Agent Skills : YAML frontmatter `name` + `description` en en-tête de `SKILL.md`) sont disponibles dans `skills/` :
 
 1. **planifier-doc** (`skills/planifier-doc/SKILL.md`) — planifier la rédaction d'un article : cadrage, audience, plan détaillé, validation avant rédaction.
 2. **rediger-doc** (`skills/rediger-doc/SKILL.md`) — rédiger un article conforme au template et au style de ce dépôt.
 
-L'agent (Vibe Code) applique ces skills en suivant les instructions du `SKILL.md` correspondant. Si un agent CLI découvre automatiquement `.claude/skills/`, il peut les invoquer par leur nom ; sinon, lire le fichier `SKILL.md` et suivre ses instructions.
+L'agent (Vibe Code ou CLI Vibe) applique ces skills en lisant le fichier `SKILL.md` correspondant dans `skills/` et en suivant ses instructions.
 
 ## Ce qu'il ne faut pas faire
 
