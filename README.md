@@ -7,6 +7,8 @@ Documentation centralisée de sujets techniques divers : guides d'installation, 
 | Article | Catégorie | Description |
 |---------|-----------|-------------|
 | [Héberger des LLM légers avec LM Studio sur un ThinkPad T14 sous Ubuntu](articles/lm-studio-ubuntu/README.md) | Guide d'installation | Installation de LM Studio sur Ubuntu, choix de modèles Qwen pour 32 Go en CPU, serveur API local et déploiement Docker |
+| [Shell Linux — cheat sheet développeur](articles/linux-shell/README.md) | Cheat sheet | Commandes shell du quotidien : permissions, grep dans les logs, redirections, processus |
+| [Vim — cheat sheet développeur](articles/vim/README.md) | Cheat sheet | Consulter et éditer fichiers et code : modes, navigation, édition, recherche, config minimale |
 
 ## Structure du dépôt
 
