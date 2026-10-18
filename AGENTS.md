@@ -36,9 +36,11 @@ Règles de structure :
 
 ## Workflow
 
-- Chaque article (ou modification) passe par une branche dédiée puis une PR.
-- Toujours vérifier le sommaire racine après ajout/modification/suppression d'un article.
+- **Pas de pull requests.** Projet strictement privé, non partagé. Tout est livré par des commits directs sur `main`.
+- Commits **propres et atomiques** : un commit = une unité de travail cohérente (un article, une correction, une mise à jour du contexte). Pas de commit mélangeant plusieurs sujets ni de commits « WIP ».
+- Avant de committer : vérifier `git status` et le diff pour n'inclure que les fichiers voulus, sans résidus ni secrets.
 - Messages de commit en français, impératif présent, une ligne concise.
+- Toujours vérifier le sommaire racine après ajout/modification/suppression d'un article.
 
 ## Style de rédaction
 
@@ -61,6 +63,5 @@ L'agent (Vibe Code) applique ces skills en suivant les instructions du `SKILL.md
 ## Ce qu'il ne faut pas faire
 
 - Ne pas modifier la structure sans mettre à jour ce fichier ni le `README.md`.
-- Ne pas pousser directement sur `main` pour une modification d'article (passer par une branche + PR).
 - Ne pas commiter de secrets (clés API, tokens, `.env`).
 - Ne pas rédiger d'article sans validation du plan par le propriétaire.
