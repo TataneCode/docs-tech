@@ -6,7 +6,7 @@ Documentation centralisée de sujets techniques divers : guides d'installation, 
 
 | Article | Catégorie | Description |
 |---------|-----------|-------------|
-| _(vide)_ | — | Le premier article ajouté apparaîtra ici |
+| [Héberger des LLM légers avec LM Studio sur un ThinkPad T14 sous Ubuntu](articles/lm-studio-ubuntu/README.md) | Guide d'installation | Installation de LM Studio sur Ubuntu, choix de modèles Qwen pour 32 Go en CPU, serveur API local et déploiement Docker |
 
 ## Structure du dépôt
 
