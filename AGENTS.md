@@ -20,6 +20,14 @@ AGENTS.md                     # Ce contexte projet
 _templates/article-template.md
 articles/<sujet>/README.md    # Un dossier par article
 skills/<skill>/SKILL.md        # Skills du projet (voir ci-dessous)
+llm-cli/                      # Boîte à outils CLI LLM (voir ci-dessous)
+├── 01-synthese-sources.md    # Synthèse des 4 dépôts étudiés (superpowers, karpathy-skills, i-have-adhd, claude-octopus)
+├── 02-formats-cibles.md      # Formats supportés par Gemini CLI et Vibe CLI (vérifiés)
+├── 03-plan-preparation.md    # Plan d'installation étape par étape
+├── skills/<nom>/SKILL.md     # 14 skills portables au standard Agent Skills (FR)
+├── agents/<nom>.toml         # 7 personas Vibe (à copier dans ~/.vibe/agents/)
+├── prompts/<nom>.md          # Prompts système des personas (à copier dans ~/.vibe/prompts/)
+└── gemini/commands/<nom>.toml # 6 commandes slash Gemini CLI (à copier dans ~/.gemini/commands/)
 ```
 
 Règles de structure :
@@ -58,6 +66,16 @@ Deux skills normalisés (format Agent Skills : YAML frontmatter `name` + `descri
 2. **rediger-doc** (`skills/rediger-doc/SKILL.md`) — rédiger un article conforme au template et au style de ce dépôt.
 
 L'agent (Vibe Code ou CLI Vibe) applique ces skills en lisant le fichier `SKILL.md` correspondant dans `skills/` et en suivant ses instructions.
+
+## Dossier `llm-cli/` — boîte à outils CLI LLM
+
+Collection personnelle de skills, personas et commandes prêts à installer sur **Gemini CLI** et **Vibe CLI / Vibe Code**, issue de la synthèse de 4 dépôts publics (voir `llm-cli/01-synthese-sources.md`).
+
+- Les skills dans `llm-cli/skills/` suivent le standard Agent Skills : un seul jeu de fichiers sert aux deux CLI (copie vers `~/.gemini/skills/` et `~/.vibe/skills/`).
+- Les personas `llm-cli/agents/` + `llm-cli/prompts/` sont au format Vibe (TOML + Markdown) : Vibe uniquement.
+- Les commandes `llm-cli/gemini/commands/` sont au format TOML de Gemini CLI : Gemini CLI uniquement.
+- Procédure d'installation et ordre d'adoption : `llm-cli/03-plan-preparation.md`.
+- Toute modification de `llm-cli/` doit rester portable (pas de dépendance à Claude Code, à un orchestrateur externe, ni à des chemins personnels absolus) et en français.
 
 ## Ce qu'il ne faut pas faire
 
