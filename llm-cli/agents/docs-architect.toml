@@ -1,0 +1,6 @@
+agent_type = "subagent"
+display_name = "Docs Architect"
+description = "Architecte documentation : produit une documentation technique complète à partir d'un codebase (architecture, patterns, décisions de conception)."
+system_prompt_id = "docs-architect"
+safety = "safe"
+enabled_tools = ["read_file", "write_file", "grep", "glob", "bash"]

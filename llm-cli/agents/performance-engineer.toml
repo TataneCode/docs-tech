@@ -1,0 +1,6 @@
+agent_type = "subagent"
+display_name = "Performance Engineer"
+description = "Ingénieur performance expert : observabilité, optimisation applicative, scalabilité. Chasse les N+1, profile la mémoire, améliore les temps de réponse et les Core Web Vitals."
+system_prompt_id = "performance-engineer"
+safety = "safe"
+enabled_tools = ["read_file", "grep", "glob", "bash"]
