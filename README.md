@@ -9,7 +9,7 @@ Documentation centralisée de sujets techniques divers : guides d'installation, 
 | [Héberger des LLM légers avec LM Studio sur un ThinkPad T14 sous Ubuntu](articles/lm-studio-ubuntu/README.md) | Guide d'installation | Installation de LM Studio sur Ubuntu, choix de modèles Qwen pour 32 Go en CPU, serveur API local et déploiement Docker |
 | [Shell Linux — cheat sheet développeur](articles/linux-shell/README.md) | Cheat sheet | Commandes shell du quotidien : permissions, grep dans les logs, redirections, processus |
 | [Vim — cheat sheet développeur](articles/vim/README.md) | Cheat sheet | Consulter et éditer fichiers et code : modes, navigation, édition, recherche, config minimale |
-| [llm-cli — skills, agents et commandes pour Gemini CLI et Vibe](llm-cli/README.md) | Cheat sheet | Boîte à outils personnelle : 14 skills portables, 7 personas Vibe, 6 commandes slash Gemini, synthèse de 4 dépôts sources |
+| [llm-cli — skills, agents et commandes pour Gemini CLI et Vibe](llm-cli/README.md) | Cheat sheet | Boîte à outils personnelle : 20 skills portables, 7 personas Vibe, 8 commandes slash Gemini, synthèse de 6 dépôts sources |
 
 ## Structure du dépôt
 
@@ -25,10 +25,10 @@ docs-tech/
     ├── 01-synthese-sources.md
     ├── 02-formats-cibles.md
     ├── 03-plan-preparation.md
-    ├── skills/          # 14 skills au standard Agent Skills (SKILL.md)
+    ├── skills/          # 20 skills au standard Agent Skills (SKILL.md)
     ├── agents/          # 7 personas Vibe (TOML)
     ├── prompts/         # Prompts système des personas (Markdown)
-    └── gemini/commands/ # 6 commandes slash Gemini CLI (TOML)
+    └── gemini/commands/ # 8 commandes slash Gemini CLI (TOML)
 ```
 
 ## Catégories

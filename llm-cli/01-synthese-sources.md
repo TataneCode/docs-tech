@@ -2,7 +2,7 @@
 
 Objectif : extraire de quatre dépôts publics ce qui est utile pour **Gemini CLI** et **Vibe CLI / Vibe Code**, sans dépendre de Claude Code ni d'aucune orchestration multi-fournisseurs.
 
-## Les 4 dépôts étudiés
+## Les 6 dépôts étudiés
 
 | Dépôt | Contenu | Ce qu'on en tire |
 |-------|---------|------------------|
@@ -10,6 +10,8 @@ Objectif : extraire de quatre dépôts publics ce qui est utile pour **Gemini CL
 | [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) | 1 skill `karpathy-guidelines` (MIT) + fichiers `CLAUDE.md`/`CURSOR.md` équivalents | Règles comportementales de base : simplicité, chirurgical, vérifier |
 | [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) | 1 skill `i-have-adhd` (MIT) + hooks toujours-actifs | Règles de formatage de sortie pour un lecteur TDAH |
 | [nyldn/claude-octopus](https://github.com/nyldn/claude-octopus) | 63 skills, 54 commandes slash, 31 personas, orchestrateur multi-LLM (`bin/octopus`) | Des workflows mûrs (slicing, PRD, thought-partner, audit sécurité), mais très couplés à Claude Octopus |
+| [THU-MAIC/OpenMAIC](https://github.com/THU-MAIC/OpenMAIC) | 25 skills de pédagogie agentique (MIT) | 4 skills de pédagogie retenus, portés en version générique |
+| [nykooi1/vibe-wise](https://github.com/nykooi1/vibe-wise) | Plugin apprentissage pour Claude Code + Codex : skills `learn`/`reset`, état local `.vibe-wise/`, hook SessionStart, script Python de reset | Un **mode apprentissage complet** : l'apprenant conduit le design, l'IA écrit le code retenu. État local portable, checkpoints structurés, onboarding guidé |
 
 ## Ce qui est retenu, et pourquoi
 
@@ -120,12 +122,32 @@ Retenus (méthode extraite, OpenMAIC retiré, généralisée à tout contenu pé
 
 **Non retenus** (trop couplés au runtime OpenMAIC ou redondants avec nos skills existants) : `stage-design`, `stage-dsl`, `slide-dsl`, `slide-craft`, `style-clone`, `page-clone`, `teacher-style-clone`, `pptx-import`, `pro-editing` (outils OpenMAIC), `lecture-style`, `workshop-style`, `deep-interactive`, `vocational`, `k12-core-literacy-planning` (formats de cours OpenMAIC), `learning-to-learn`, `social-emotional-learning`, `understanding-by-design`, `spiral-curriculum`, `zone-of-proximal-development` (méthodes pédagogiques valides mais exprimées en DSL OpenMAIC — à re-porter au cas par cas si besoin), `build-personal-skill` (méta, spécifique OpenClaw), et le skill `openmaic` (setup de la plateforme elle-même, hors scope).
 
+### 6. nykooi1/vibe-wise — mode apprentissage (2 skills)
+
+Le dépôt définit un plugin **Claude Code + Codex** qui met l'apprentissage en premier :
+l'IA demande l'approche de l'apprenant, l'aide à examiner les compromis, explique les
+concepts méconnus, puis écrit le code retenu après confirmation explicite. L'apprenant
+reste propriétaire des décisions de design.
+
+Éléments retenus :
+
+| Élément source | Retenu sous le nom | Adaptation |
+|----------------|--------------------|------------|
+| `skills/learn/` (SKILL.md + behavior.md + onboarding.md + state-templates.md) | `vibe-wise-learn` | Traduit en français, `AskUserQuestion` → question texte simple, suppression du hook SessionStart (pas d'équivalent Vibe/Gemini) |
+| `skills/reset/` (SKILL.md + reset.py) | `vibe-wise-reset` | Traduit en français, `reset.py` rendu autonome (lookup d'état intégré, plus d'import depuis `hooks/session_start.py`) |
+| État local `.vibe-wise/` (profile.md, progress.md, project-map.md) | conservé tel quel | Compatible entre Claude Code, Codex, Vibe et Gemini CLI — les notes sont interchangeables |
+
+**Non retenus** : le hook `SessionStart` de Claude Code (Vibe et Gemini n'ont pas d'équivalent
+— l'utilisateur invoque `/vibe-wise-learn` manuellement à chaque session), les références
+`${CLAUDE_PLUGIN_ROOT}`, le picker natif `AskUserQuestion`, et les fichiers spécifiques
+Codex (`codex.md`, `agents/openai.yaml`).
+
 ## Synthèse : ce que chaque CLI reçoit
 
 | Élément | Gemini CLI | Vibe CLI / Vibe Code |
 |---------|-----------|----------------------|
-| 18 skills `SKILL.md` | ✅ `~/.gemini/skills/` (activation auto via `description`) | ✅ `~/.vibe/skills/` (slash command `/nom` + activation auto) |
-| Personas | ❌ (pas de mécanisme) → remplacés par 6 commandes TOML `~/.gemini/commands/` | ✅ 7 agents TOML `~/.vibe/agents/` + prompts `~/.vibe/prompts/` |
+| 20 skills `SKILL.md` | ✅ `~/.gemini/skills/` (activation auto via `description`) | ✅ `~/.vibe/skills/` (slash command `/nom` + activation auto) |
+| Personas | ❌ (pas de mécanisme) → remplacés par 8 commandes TOML `~/.gemini/commands/` | ✅ 7 agents TOML `~/.vibe/agents/` + prompts `~/.vibe/prompts/` |
 | Contexte permanent (style Karpathy + TDAH) | `GEMINI.md` à créer (voir plan) | `AGENTS.md` à créer (voir plan) |
 
 ## Pièges connus
@@ -142,6 +164,7 @@ Retenus (méthode extraite, OpenMAIC retiré, généralisée à tout contenu pé
 - [i-have-adhd (ayghri)](https://github.com/ayghri/i-have-adhd)
 - [claude-octopus (nyldn)](https://github.com/nyldn/claude-octopus)
 - [OpenMAIC (THU-MAIC)](https://github.com/THU-MAIC/OpenMAIC) — répertoire `skills/agent-runtime/`
+- [vibe-wise (nykooi1)](https://github.com/nykooi1/vibe-wise) — plugin apprentissage (MIT)
 - [Spécification Agent Skills (agentskills.io)](https://agentskills.io)
 - [Documentation Gemini CLI — Skills](https://geminicli.com/docs/cli/skills/)
 - [Documentation Gemini CLI — Commandes custom](https://geminicli.com/docs/cli/custom-commands/)

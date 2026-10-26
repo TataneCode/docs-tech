@@ -11,17 +11,19 @@ Capitaliser les meilleures pratiques de la communauté (workflows agent, discipl
 ```
 llm-cli/
 ├── README.md                    # Ce fichier
-├── 01-synthese-sources.md       # Synthèse des 4 repos étudiés (skills, agents, commandes)
+├── 01-synthese-sources.md       # Synthèse des 6 repos étudiés (skills, agents, commandes)
 ├── 02-formats-cibles.md         # Formats supportés par Gemini CLI et Vibe CLI (faits vérifiés)
 ├── 03-plan-preparation.md       # Plan de préparation et d'installation, étape par étape
 ├── skills/                      # Skills au standard Agent Skills (SKILL.md, YAML frontmatter)
-│   └── <nom-du-skill>/SKILL.md  # Portable : Gemini CLI, Vibe, Claude Code, Codex...
+│   └── <nom-du-skill>/          # Portable : Gemini CLI, Vibe, Claude Code, Codex...
+│       ├── SKILL.md
+│       └── scripts/             # Scripts Python optionnels (ex. reset.py pour vibe-wise)
 ├── agents/                      # Personas Vibe (TOML, ~/.vibe/agents/)
 ├── prompts/                     # Prompts système des personas (Markdown, ~/.vibe/prompts/)
 └── gemini/commands/             # Commandes slash Gemini CLI (TOML, ~/.gemini/commands/)
 ```
 
-## Les 18 skills retenus
+## Les 20 skills retenus
 
 | Skill | Source | Utilité principale |
 |-------|--------|--------------------|
@@ -43,6 +45,8 @@ llm-cli/
 | `deep-research` | OpenMAIC | Recherche web budgétée avant rédaction, avec registre claim → source |
 | `fact-check` | OpenMAIC | Vérification factuelle ciblée d'un contenu existant (erreurs avérées, formulations trompeuses) |
 | `curriculum-planner` | OpenMAIC | Planifier une série de leçons cohérentes, avec validation de la liste complète avant production |
+| `vibe-wise-learn` | nykooi1/vibe-wise | Mode apprentissage : l'apprenant conduit le design, l'IA écrit le code retenu |
+| `vibe-wise-reset` | nykooi1/vibe-wise | Sauvegarde les notes d'apprentissage et relance l'onboarding |
 
 ## Installation rapide
 
@@ -61,6 +65,12 @@ cp llm-cli/prompts/*.md ~/.vibe/prompts/
 cp -r llm-cli/gemini/commands/* ~/.gemini/commands/
 ```
 
+> **Note VibeWise** : les skills `vibe-wise-learn` et `vibe-wise-reset` embarquent
+> un script Python (`scripts/reset.py`, bibliothèque standard uniquement, Python 3.8+).
+> Aucune installation de dépendance n'est requise. Sur Vibe, invoque
+> `/vibe-wise-learn` et `/vibe-wise-reset` ; sur Gemini CLI, utilise les commandes
+> `/vibe-wise:learn` et `/vibe-wise:reset` (voir `gemini/commands/vibe-wise/`).
+
 ## Provenance
 
 - [obra/superpowers](https://github.com/obra/superpowers) — 14 skills de discipline de développement
@@ -68,5 +78,6 @@ cp -r llm-cli/gemini/commands/* ~/.gemini/commands/
 - [ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd) — skill de style de sortie TDAH (MIT)
 - [nyldn/claude-octopus](https://github.com/nyldn/claude-octopus) — 63 skills, 54 commandes, 31 personas orientés multi-LLM
 - [THU-MAIC/OpenMAIC](https://github.com/THU-MAIC/OpenMAIC) — 25 skills de pédagogie agentique (MIT) : 4 retenus, portés en version générique
+- [nykooi1/vibe-wise](https://github.com/nykooi1/vibe-wise) — plugin apprentissage pour Claude Code + Codex (MIT) : mode learn + reset avec état local `.vibe-wise/`
 
-Tous les contenus portés ici sont des adaptations en français ; les mécanismes dépendant de Claude Octopus (orchestration multi-fournisseurs), de Claude Code ou du runtime OpenMAIC (outils `create_stage`, `generate_scene`, DSL de slides) ont été retirés ou remplacés par des équivalents génériques.
+Tous les contenus portés ici sont des adaptations en français ; les mécanismes dépendant de Claude Octopus (orchestration multi-fournisseurs), de Claude Code (`${CLAUDE_PLUGIN_ROOT}`, hook SessionStart, AskUserQuestion), du runtime OpenMAIC (outils `create_stage`, `generate_scene`, DSL de slides) ou de Codex ont été retirés ou remplacés par des équivalents génériques mono-agent.

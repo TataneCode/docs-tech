@@ -21,13 +21,15 @@ _templates/article-template.md
 articles/<sujet>/README.md    # Un dossier par article
 skills/<skill>/SKILL.md        # Skills du projet (voir ci-dessous)
 llm-cli/                      # Boîte à outils CLI LLM (voir ci-dessous)
-├── 01-synthese-sources.md    # Synthèse des 4 dépôts étudiés (superpowers, karpathy-skills, i-have-adhd, claude-octopus)
+├── 01-synthese-sources.md    # Synthèse des 6 dépôts étudiés (superpowers, karpathy-skills, i-have-adhd, claude-octopus, OpenMAIC, vibe-wise)
 ├── 02-formats-cibles.md      # Formats supportés par Gemini CLI et Vibe CLI (vérifiés)
 ├── 03-plan-preparation.md    # Plan d'installation étape par étape
-├── skills/<nom>/SKILL.md     # 14 skills portables au standard Agent Skills (FR)
+├── skills/<nom>/             # 20 skills portables au standard Agent Skills (FR)
+│   ├── SKILL.md              # Instructions du skill
+│   └── scripts/              # Scripts Python optionnels (ex. reset.py pour vibe-wise-reset)
 ├── agents/<nom>.toml         # 7 personas Vibe (à copier dans ~/.vibe/agents/)
 ├── prompts/<nom>.md          # Prompts système des personas (à copier dans ~/.vibe/prompts/)
-└── gemini/commands/<nom>.toml # 6 commandes slash Gemini CLI (à copier dans ~/.gemini/commands/)
+└── gemini/commands/<nom>.toml # 8 commandes slash Gemini CLI (à copier dans ~/.gemini/commands/)
 ```
 
 Règles de structure :
@@ -69,9 +71,10 @@ L'agent (Vibe Code ou CLI Vibe) applique ces skills en lisant le fichier `SKILL.
 
 ## Dossier `llm-cli/` — boîte à outils CLI LLM
 
-Collection personnelle de skills, personas et commandes prêts à installer sur **Gemini CLI** et **Vibe CLI / Vibe Code**, issue de la synthèse de 4 dépôts publics (voir `llm-cli/01-synthese-sources.md`).
+Collection personnelle de skills, personas et commandes prêts à installer sur **Gemini CLI** et **Vibe CLI / Vibe Code**, issue de la synthèse de 6 dépôts publics (voir `llm-cli/01-synthese-sources.md`).
 
 - Les skills dans `llm-cli/skills/` suivent le standard Agent Skills : un seul jeu de fichiers sert aux deux CLI (copie vers `~/.gemini/skills/` et `~/.vibe/skills/`).
+- Un skill peut embarquer un sous-dossier `scripts/` (Python, bibliothèque standard uniquement) pour des opérations déterministes (ex. `vibe-wise-reset/scripts/reset.py`).
 - Les personas `llm-cli/agents/` + `llm-cli/prompts/` sont au format Vibe (TOML + Markdown) : Vibe uniquement.
 - Les commandes `llm-cli/gemini/commands/` sont au format TOML de Gemini CLI : Gemini CLI uniquement.
 - Procédure d'installation et ordre d'adoption : `llm-cli/03-plan-preparation.md`.
