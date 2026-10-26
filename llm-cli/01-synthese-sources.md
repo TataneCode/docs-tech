@@ -105,11 +105,26 @@ Le dépôt définit 31 personas. On retient les 7 profils les plus utiles en mon
 
 Gemini CLI n'a pas de mécanisme de personas ; les commandes slash TOML remplacent les entrées `/octo:*` pour les 6 workflows les plus fréquents : `/plan`, `/debug`, `/review`, `/tdd`, `/brainstorm`, `/discipline` (mode rigueur on/off). Voir `gemini/commands/`.
 
+### 5. THU-MAIC/OpenMAIC — pédagogie agentique (25 skills, 4 retenus)
+
+OpenMAIC est une plateforme de « classroom » multi-agents. Son répertoire `skills/agent-runtime/` contient 25 skills de **conception pédagogique** très mûres, mais exprimées pour le runtime OpenMAIC (outils `create_stage`, `generate_scene`, `set_roster`, DSL de slides, scènes `interactive`/`slide`/`quiz`). La plupart ne sont pas portables telles quelles ; la **méthode** l'est.
+
+Retenus (méthode extraite, OpenMAIC retiré, généralisée à tout contenu pédagogique) :
+
+| Skill source | Retenu sous le nom | Ce qui est gardé |
+|--------------|--------------------|-----------------|
+| `feynman-learning` | `feynman-learning` | Le cycle en 8 étapes : teach-back d'abord, un seul trou à la fois, questions socratiques avant réponses, chasse au jargon, stress-test des analogies, transfert, enregistrement final |
+| `deep-research` | `deep-research` | Recherche avant rédaction, facettes, budget (max 8 recherches / 6 URLs), registre claim → source, règles dures (jamais d'URL inventée, conflits présentés) |
+| `fact-check` | `fact-check` | Revue ciblée (pas d'audit exhaustif), liste courte de claims à risque, rapport en 3 groupes (erreur avérée / formulation trompeuse / vérification nécessaire), choix utilisateur après revue |
+| `curriculum-planner` | `curriculum-planner` | Clarification en 2–3 tours, porte de confirmation sur la liste complète des leçons avant production, boucle leçon par leçon |
+
+**Non retenus** (trop couplés au runtime OpenMAIC ou redondants avec nos skills existants) : `stage-design`, `stage-dsl`, `slide-dsl`, `slide-craft`, `style-clone`, `page-clone`, `teacher-style-clone`, `pptx-import`, `pro-editing` (outils OpenMAIC), `lecture-style`, `workshop-style`, `deep-interactive`, `vocational`, `k12-core-literacy-planning` (formats de cours OpenMAIC), `learning-to-learn`, `social-emotional-learning`, `understanding-by-design`, `spiral-curriculum`, `zone-of-proximal-development` (méthodes pédagogiques valides mais exprimées en DSL OpenMAIC — à re-porter au cas par cas si besoin), `build-personal-skill` (méta, spécifique OpenClaw), et le skill `openmaic` (setup de la plateforme elle-même, hors scope).
+
 ## Synthèse : ce que chaque CLI reçoit
 
 | Élément | Gemini CLI | Vibe CLI / Vibe Code |
 |---------|-----------|----------------------|
-| 14 skills `SKILL.md` | ✅ `~/.gemini/skills/` (activation auto via `description`) | ✅ `~/.vibe/skills/` (slash command `/nom` + activation auto) |
+| 18 skills `SKILL.md` | ✅ `~/.gemini/skills/` (activation auto via `description`) | ✅ `~/.vibe/skills/` (slash command `/nom` + activation auto) |
 | Personas | ❌ (pas de mécanisme) → remplacés par 6 commandes TOML `~/.gemini/commands/` | ✅ 7 agents TOML `~/.vibe/agents/` + prompts `~/.vibe/prompts/` |
 | Contexte permanent (style Karpathy + TDAH) | `GEMINI.md` à créer (voir plan) | `AGENTS.md` à créer (voir plan) |
 
@@ -126,6 +141,7 @@ Gemini CLI n'a pas de mécanisme de personas ; les commandes slash TOML remplace
 - [andrej-karpathy-skills (multica-ai)](https://github.com/multica-ai/andrej-karpathy-skills)
 - [i-have-adhd (ayghri)](https://github.com/ayghri/i-have-adhd)
 - [claude-octopus (nyldn)](https://github.com/nyldn/claude-octopus)
+- [OpenMAIC (THU-MAIC)](https://github.com/THU-MAIC/OpenMAIC) — répertoire `skills/agent-runtime/`
 - [Spécification Agent Skills (agentskills.io)](https://agentskills.io)
 - [Documentation Gemini CLI — Skills](https://geminicli.com/docs/cli/skills/)
 - [Documentation Gemini CLI — Commandes custom](https://geminicli.com/docs/cli/custom-commands/)
