@@ -37,10 +37,10 @@ Règles impératives (cf. `AGENTS.md` — Style de rédaction) :
 
 ### 4. Livrer
 
-- Pas de PR : committer directement sur `main` (cf. `AGENTS.md` — Workflow).
+- **MR obligatoire** (cf. `AGENTS.md` — Workflow) : créer une branche de travail, y committer, pousser, puis ouvrir une merge request vers `main`. Ne jamais committer directement sur `main`.
 - Commit propre et atomique : uniquement les fichiers de l'article + le `README.md` racine (sommaire). Vérifier `git status` et le diff avant d'ajouter.
 - Message de commit en français, impératif présent, une ligne concise (ex. : « Ajout de l'article d'installation de GLM Studio »).
-- Pousser sur `origin/main` et signaler le commit à l'utilisateur.
+- Pousser la branche et signaler la MR à l'utilisateur.
 
 ## Auto-vérification avant commit
 
