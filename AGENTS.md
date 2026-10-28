@@ -45,7 +45,7 @@ Règles de structure :
 
 ## Workflow
 
-- **Pas de pull requests.** Projet strictement privé, non partagé. Tout est livré par des commits directs sur `main`.
+- **Merge requests obligatoires.** Toute mise à jour de `main` passe désormais par une MR : branche de travail (`vibe/<sujet>` ou nom explicite), commit(s) propres et atomiques, MR ouverte vers `main`, revue puis merge. Plus de commits directs sur `main`.
 - Commits **propres et atomiques** : un commit = une unité de travail cohérente (un article, une correction, une mise à jour du contexte). Pas de commit mélangeant plusieurs sujets ni de commits « WIP ».
 - Avant de committer : vérifier `git status` et le diff pour n'inclure que les fichiers voulus, sans résidus ni secrets.
 - Messages de commit en français, impératif présent, une ligne concise.
