@@ -11,6 +11,7 @@ Documentation centralisée de sujets techniques divers : guides d'installation, 
 | [Vim — cheat sheet développeur](articles/vim/README.md) | Cheat sheet | Consulter et éditer fichiers et code : modes, navigation, édition, recherche, config minimale |
 | [llm-cli — skills, agents et commandes pour Gemini CLI et Vibe](llm-cli/README.md) | Cheat sheet | Boîte à outils personnelle : 20 skills portables, 7 personas Vibe, 8 commandes slash Gemini, synthèse de 6 dépôts sources |
 | [colibri — synthèse et mise en place de GLM-5.3-Flash](articles/colibri/README.md) | Guide d'installation | Moteur d'inférence C pur pour modèles MoE géants sur matériel ordinaire : fonctionnement, installation de GLM-5.3-Flash, analyse d'un fork Rust |
+| [FreeLLMAPI — agréger les free tiers LLM et connecter OpenCode](articles/freellmapi/README.md) | Guide d'installation | Routeur local OpenAI-compatible agrégeant 34 free tiers de fournisseurs LLM : installation Docker, clé API unifiée et connexion d'OpenCode via un provider custom dans `opencode.json` |
 
 ## Structure du dépôt
 
