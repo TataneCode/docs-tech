@@ -12,6 +12,7 @@ Documentation centralisée de sujets techniques divers : guides d'installation, 
 | [llm-cli — skills, agents et commandes pour Gemini CLI et Vibe](llm-cli/README.md) | Cheat sheet | Boîte à outils personnelle : 20 skills portables, 7 personas Vibe, 8 commandes slash Gemini, synthèse de 6 dépôts sources |
 | [colibri — synthèse et mise en place d'un modèle de développement (Qwen3-Coder-30B-A3B)](articles/colibri/README.md) | Guide d'installation | Moteur d'inférence C pur pour modèles MoE sur matériel ordinaire : choix du modèle, installation sur Linux/WSL, connexion d'opencode, annexe GLM-5.3-Flash, analyse d'un fork Rust |
 | [FreeLLMAPI — agréger les free tiers LLM et connecter OpenCode](articles/freellmapi/README.md) | Guide d'installation | Routeur local OpenAI-compatible agrégeant 34 free tiers de fournisseurs LLM : installation Docker, clé API unifiée et connexion d'OpenCode via un provider custom dans `opencode.json` |
+| [LLM — fondamentaux et panorama](articles/llm-fondamentaux/README.md) | Guide | Série de 8 chapitres sur les LLM en français : fonctionnement, entraînement, hallucinations, température, prompt engineering, fine-tuning/RAG, création d'un agent IA et bilan des modèles (octobre 2026) |
 
 ## Structure du dépôt
 
