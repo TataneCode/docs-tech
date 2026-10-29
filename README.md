@@ -10,7 +10,7 @@ Documentation centralisée de sujets techniques divers : guides d'installation, 
 | [Shell Linux — cheat sheet développeur](articles/linux-shell/README.md) | Cheat sheet | Commandes shell du quotidien : permissions, grep dans les logs, redirections, processus |
 | [Vim — cheat sheet développeur](articles/vim/README.md) | Cheat sheet | Consulter et éditer fichiers et code : modes, navigation, édition, recherche, config minimale |
 | [llm-cli — skills, agents et commandes pour Gemini CLI et Vibe](llm-cli/README.md) | Cheat sheet | Boîte à outils personnelle : 20 skills portables, 7 personas Vibe, 8 commandes slash Gemini, synthèse de 6 dépôts sources |
-| [colibri — synthèse et mise en place de GLM-5.3-Flash](articles/colibri/README.md) | Guide d'installation | Moteur d'inférence C pur pour modèles MoE géants sur matériel ordinaire : fonctionnement, installation de GLM-5.3-Flash, analyse d'un fork Rust |
+| [colibri — synthèse et mise en place d'un modèle de développement (Qwen3-Coder-30B-A3B)](articles/colibri/README.md) | Guide d'installation | Moteur d'inférence C pur pour modèles MoE sur matériel ordinaire : choix du modèle, installation sur Linux/WSL, connexion d'opencode, annexe GLM-5.3-Flash, analyse d'un fork Rust |
 | [FreeLLMAPI — agréger les free tiers LLM et connecter OpenCode](articles/freellmapi/README.md) | Guide d'installation | Routeur local OpenAI-compatible agrégeant 34 free tiers de fournisseurs LLM : installation Docker, clé API unifiée et connexion d'OpenCode via un provider custom dans `opencode.json` |
 
 ## Structure du dépôt
