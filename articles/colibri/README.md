@@ -147,12 +147,140 @@ Machine de référence : 6 cœurs physiques, 25 Go de RAM, modèle sur disque or
 
 Entrée image depuis `coli chat` (chemin collé dans le message), `coli web` (pièce jointe), ou `image_url` en base64 via l'API. Le prétraitement (`tools/glm53_image.py`) est épinglé contre le `Glm5NextImageProcessor` officiel. Côté serveur, un chemin local n'est lu que sous `COLI_IMAGE_ROOT` et les URL distantes sont refusées (pas de lecture réseau au gré du client).
 
+## Utiliser colibri depuis opencode
+
+[opencode](https://opencode.ai) est un agent de codage en terminal. colibri expose une API OpenAI-compatible (`coli serve`), donc opencode s'y connecte comme à n'importe quel fournisseur local : un provider personnalisé dans `opencode.json`, pointé sur `http://127.0.0.1:8000/v1`.
+
+### Prérequis
+
+- `coli serve` en cours avec le modèle chargé (le `--model-id` passé au lancement est l'identifiant exposé) :
+
+```bash
+coli serve --model /chemin/glm53_i4 --model-id glm-5.3-flash-colibri --port 8000
+```
+
+- Vérifier que l'endpoint répond (aucune clé requise par défaut) :
+
+```bash
+curl http://127.0.0.1:8000/v1/models
+```
+
+### Configuration
+
+Dans `~/.config/opencode/opencode.json` (global) ou `opencode.json` à la racine du projet :
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "colibri": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "colibri (local)",
+      "options": {
+        "baseURL": "http://127.0.0.1:8000/v1",
+        "apiKey": "local"
+      },
+      "models": {
+        "glm-5.3-flash-colibri": {
+          "name": "GLM-5.3-Flash (colibri)",
+          "limit": { "context": 131072, "output": 8192 }
+        }
+      }
+    }
+  }
+}
+```
+
+- `colibri` est l'identifiant du provider (libre, repris dans les références `colibri/<model>`)
+- `npm: "@ai-sdk/openai-compatible"` : le paquet AI SDK pour une API `/v1/chat/completions`
+- `apiKey: "local"` : valeur bidon — colibri n'exige aucune clé par défaut (la clé n'est vérifiée que si `COLI_API_KEY` est défini au lancement du serveur)
+- `models` : la clé doit correspondre à l'`id` renvoyé par `GET /v1/models` ; `limit.context` n'est que l'affichage du budget côté client — calez-le sur ce que votre configuration KV permet réellement (ex. `GLM53_MAXT=8192` → 8192)
+
+Puis sélectionner le modèle dans opencode : `opencode` puis `/models`, ou directement `opencode run --model colibri/glm-5.3-flash-colibri "ta question"`.
+
+### Agents opencode dédiés
+
+opencode permet de définir ses propres agents (section `agent` du `opencode.json`) avec chacun son modèle au format `provider/model-id`. Exemple : un agent `plan` sur le même serveur colibri, et un sous-agent `review` en lecture seule.
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "colibri": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "colibri (local)",
+      "options": {
+        "baseURL": "http://127.0.0.1:8000/v1",
+        "apiKey": "local"
+      },
+      "models": {
+        "glm-5.3-flash-colibri": {
+          "name": "GLM-5.3-Flash (colibri)",
+          "limit": { "context": 131072, "output": 8192 }
+        }
+      }
+    }
+  },
+  "agent": {
+    "build": {
+      "mode": "primary",
+      "model": "colibri/glm-5.3-flash-colibri"
+    },
+    "plan": {
+      "mode": "primary",
+      "model": "colibri/glm-5.3-flash-colibri",
+      "tools": { "write": false, "edit": false, "bash": false }
+    },
+    "review": {
+      "description": "Relit le code sans le modifier",
+      "mode": "subagent",
+      "model": "colibri/glm-5.3-flash-colibri",
+      "tools": { "write": false, "edit": false, "bash": false }
+    }
+  }
+}
+```
+
+- `build` et `plan` sont les agents primaires intégrés d'opencode, ici surchargés pour pointer sur colibri
+- `review` est un sous-agent personnalisé (`mode: "subagent"`), invoquable via `@review`
+- `tools: { "write": false, "edit": false, "bash": false }` restreint l'agent à la lecture — utile pour un plan ou une revue
+
+### Adapter à un modèle plus petit
+
+Si GLM-5.3-Flash est trop lent pour un usage agentique (voir les avertissements ci-dessous), le même bloc fonctionne avec n'importe quel modèle servi par colibri — par exemple Qwen3.6-35B-A3B, bien plus rapide sur CPU (~6 tok/s) et suffisant pour du codage assisté :
+
+```json
+{
+  "provider": {
+    "colibri": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "colibri (local)",
+      "options": {
+        "baseURL": "http://127.0.0.1:8000/v1",
+        "apiKey": "local"
+      },
+      "models": {
+        "qwen36-colibri": {
+          "name": "Qwen3.6-35B-A3B (colibri)",
+          "limit": { "context": 262144, "output": 8192 }
+        }
+      }
+    }
+  }
+}
+```
+
+et les agents référencent `colibri/qwen36-colibri`.
+
 ## Pièges connus
 
 - **Ne pas confondre les moteurs** : `glm-5.2`/`glm-5.3` passent par le setup one-step et le moteur `colibri.c` ; GLM-5.3-Flash a son propre moteur `glm53.c` et sa propre conversion (`tools/convert_glm53.py`), hors catalogue
 - **Espace disque** : prévoir ~195 Go pour le modèle converti, pas seulement les 328 Go du dépôt source ; le convertisseur vérifie l'espace libre (`--min-free-gb`, 30 Go constatés upstream)
 - **Images trop grandes** : sans `GLM53_MAX_IMAGE_TOKENS`, une photo 1080p = 2691 tokens de prefill, interminable sur un moteur qui streame depuis le disque
 - **Attentes** : ~20-44 s/token sur CPU avec disque ordinaire — c'est le prix du « 321B sur un laptop », pas un bug
+- **Agent de codage (opencode, etc.) avec un grand modèle streamé** : le prefill d'un agent (prompt système + définitions d'outils, souvent 10-20k tokens) tourne à quelques tokens/seconde en CPU — comptez un long « thinking » silencieux avant le premier token. Le decode (~1 tok/s sur un gros modèle) pénalise aussi les boucles multi-tours. Les requêtes chirurgicales à contexte court passent ; les sessions agentiques itératives contre un modèle 744B streamé depuis le disque ne ressemblent pas à une API hébergée. Réduire le preamble système et le catalogue d'outils du client aide. Sur un modèle plus petit et résident en RAM (Qwen3.6, OLMoE), l'expérience est nettement plus fluide
+- **opencode + `apiKey`** : opencode refuse souvent de démarrer sans clé — la valeur bidon `"local"` suffit, colibri n'en exige aucune par défaut
+- **opencode + tool calling** : ne fonctionne que sur les moteurs qui le supportent (GLM-5.3-Flash oui ; Inkling et OLMoE non) — cf. la matrice dans la doc upstream `docs/api.md`
 - **Vulkan sur glm53** : testé sur Lavapipe (Vulkan logiciel) pour la correction ; aucun GPU réel n'avait encore tourné les vrais poids upstream à la rédaction
 - **WSL** : garder le dossier du modèle sur le disque Linux (`~/colibri-models`), pas sous `/mnt/c` (beaucoup plus lent)
 
@@ -165,4 +293,7 @@ Entrée image depuis `coli chat` (chemin collé dans le message), `coli web` (pi
 - [Quick start](https://github.com/JustVugg/colibri/blob/main/docs/quickstart.md) — installation pas à pas, toutes plateformes
 - [Variables d'environnement](https://github.com/JustVugg/colibri/blob/main/docs/ENVIRONMENT.md) — inventaire complet par moteur
 - [Benchmarks et protocole de mesure](https://github.com/JustVugg/colibri/blob/main/docs/benchmarks.md)
+- [API et connexion des CLI/éditeurs (aider, crush, pi…)](https://github.com/JustVugg/colibri/blob/main/docs/api.md#connect-a-coding-cli-or-editor)
+- [Documentation opencode — providers](https://opencode.ai/docs/providers/) — provider personnalisé `@ai-sdk/openai-compatible`
+- [Documentation opencode — agents](https://opencode.ai/docs/agents/) — section `agent` de `opencode.json`
 - [Analyse : intérêt d'un fork en Rust](fork-rust.md)
