@@ -21,28 +21,52 @@ jobs:
       - name: Récupère le dépôt
         uses: actions/checkout@v4
 
-      - name: Concatène les chapitres dans l'ordre numérique
+      - name: Installe pandoc et WeasyPrint
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            pandoc \
+            libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 shared-mime-info
+          python3 -m pip install weasyprint
+
+      - name: Concatène les chapitres dans l'ordre numérique et génère le PDF
         run: |
           set -euo pipefail
-          out="llm-fondamentaux.pdf"
           src="llm-fondamentaux-concat.md"
+          html="llm-fondamentaux.html"
+          out="llm-fondamentaux.pdf"
           : > "$src"
           for f in articles/llm-fondamentaux/*.md; do
             case "$f" in
               */README.md) continue ;;
             esac
-            printf '\n\n\\newpage\n\n' >> "$src"
+            printf '\n\n' >> "$src"
             cat "$f" >> "$src"
           done
+          cat > style.css <<'EOF'
+          @page { size: A4; margin: 2.5cm; }
+          body { font-family: "DejaVu Serif", serif; font-size: 11pt; line-height: 1.55; color: #1a1a1a; }
+          h1 { page-break-before: always; font-family: "DejaVu Sans", sans-serif; font-size: 18pt; }
+          h1:first-of-type { page-break-before: avoid; }
+          h2, h3 { font-family: "DejaVu Sans", sans-serif; }
+          code { font-family: "DejaVu Sans Mono", monospace; font-size: 9.5pt; background: #f4f4f4; padding: 1px 4px; }
+          pre { background: #f4f4f4; padding: 10px; border-radius: 4px; overflow-x: auto; }
+          pre code { background: none; padding: 0; }
+          table { border-collapse: collapse; margin: 1em 0; }
+          th, td { border: 1px solid #ccc; padding: 4px 10px; text-align: left; }
+          th { background: #f0f0f0; }
+          blockquote { border-left: 3px solid #bbb; margin-left: 0; padding-left: 14px; color: #555; }
+          a { color: #1a5fb4; text-decoration: none; }
+          EOF
           pandoc "$src" \
             --from markdown \
-            --pdf-engine=xelatex \
-            -V geometry:margin=2.5cm \
-            -V mainfont="DejaVu Serif" \
-            -V sansfont="DejaVu Sans" \
-            -V monofont="DejaVu Sans Mono" \
-            -V lang=fr \
-            -o "$out"
+            --to html5 \
+            --standalone \
+            --metadata title="LLM — fondamentaux et panorama" \
+            --metadata lang=fr \
+            --css style.css \
+            -o "$html"
+          python3 -m weasyprint "$html" "$out"
           ls -lh "$out"
 
       - name: Publie le PDF en artefact
