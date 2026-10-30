@@ -1,0 +1,73 @@
+name: PDF de la série LLM fondamentaux
+
+on:
+  pull_request:
+    paths:
+      - "articles/llm-fondamentaux/**"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: pdf-llm-fondamentaux-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  pdf:
+    name: Concatène les chapitres en un PDF
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupère le dépôt
+        uses: actions/checkout@v4
+
+      - name: Concatène les chapitres dans l'ordre numérique
+        run: |
+          set -euo pipefail
+          out="llm-fondamentaux.pdf"
+          src="llm-fondamentaux-concat.md"
+          : > "$src"
+          for f in articles/llm-fondamentaux/*.md; do
+            case "$f" in
+              */README.md) continue ;;
+            esac
+            printf '\n\n\\newpage\n\n' >> "$src"
+            cat "$f" >> "$src"
+          done
+          pandoc "$src" \
+            --from markdown \
+            --pdf-engine=xelatex \
+            -V geometry:margin=2.5cm \
+            -V mainfont="DejaVu Serif" \
+            -V sansfont="DejaVu Sans" \
+            -V monofont="DejaVu Sans Mono" \
+            -V lang=fr \
+            -o "$out"
+          ls -lh "$out"
+
+      - name: Publie le PDF en artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: llm-fondamentaux-pdf
+          path: llm-fondamentaux.pdf
+          retention-days: 7
+
+      - name: Commente la pull request avec le lien de l'artefact
+        if: github.event.pull_request != null
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = [
+              '📄 **PDF de la série `articles/llm-fondamentaux` généré**',
+              '',
+              `Artefact \`llm-fondamentaux-pdf\` téléchargeable depuis le [run de ce workflow](${runUrl}) (section *Artifacts*, valable 7 jours).`,
+              '',
+              'Le PDF concatène les chapitres `01` à `10` (hors `README.md`) dans l\'ordre numérique, un chapitre par page.'
+            ].join('\n');
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
