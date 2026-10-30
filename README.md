@@ -13,6 +13,7 @@ Documentation centralisée de sujets techniques divers : guides d'installation, 
 | [colibri — synthèse et mise en place d'un modèle de développement (Qwen3-Coder-30B-A3B)](articles/colibri/README.md) | Guide d'installation | Moteur d'inférence C pur pour modèles MoE sur matériel ordinaire : choix du modèle, installation sur Linux/WSL, connexion d'opencode, annexe GLM-5.3-Flash, analyse d'un fork Rust |
 | [FreeLLMAPI — agréger les free tiers LLM et connecter OpenCode](articles/freellmapi/README.md) | Guide d'installation | Routeur local OpenAI-compatible agrégeant 34 free tiers de fournisseurs LLM : installation Docker, clé API unifiée et connexion d'OpenCode via un provider custom dans `opencode.json` |
 | [LLM — fondamentaux et panorama](articles/llm-fondamentaux/README.md) | Guide | Série de 10 chapitres sur les LLM en français : fonctionnement, entraînement, hallucinations, température, prompt engineering, fine-tuning/RAG, création d'un agent IA, bilan des modèles, réseaux de neurones et inférence (octobre 2026) |
+| [Harness engineering — concevoir l'environnement d'un agent IA](articles/harness-engineering/README.md) | Guide | Agent = modèle + harnais : boucle, outils, mémoire, vérifications, garde-fous et principes pratiques pour fiabiliser un agent LLM |
 
 ## Structure du dépôt
 
