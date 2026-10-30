@@ -46,7 +46,7 @@ La génération est **autorégressive** : chaque nouveau token dépend de tous l
 
 ## L'attention : relier les mots entre eux
 
-Le mécanisme central du transformer s'appelle **l'attention** (self-attention). Pour chaque token, le modèle calcule à quels tokens précédents il doit « prêter attention ».
+Le mécanisme central du transformer s'appelle **l'attention** (self-attention). (Les fondations — neurone, couches, propagation avant, rétropropagation — sont détaillées au chapitre 9.) Pour chaque token, le modèle calcule à quels tokens précédents il doit « prêter attention ».
 
 Exemple :
 
@@ -71,7 +71,7 @@ Deux phases distinctes :
 | Phase | Nom | Ce qui se passe |
 |-------|-----|-----------------|
 | Entraînement | « Training » | Les poids du réseau sont ajustés sur des milliards de tokens. Coûteux (jours à mois sur des milliers de GPU). Fait une seule fois par le laboratoire (voir chapitre 2). |
-| Inférence | « Serving » | Les poids sont figés. Le modèle génère du texte, token par token, sur votre requête. C'est ce que vous payez quand vous appelez une API. |
+| Inférence | « Serving » | Les poids sont figés. Le modèle génère du texte, token par token, sur votre requête. C'est ce que vous payez quand vous appelez une API (voir chapitre 10 pour le déroulement détaillé de l'inférence). |
 
 **Conséquence pratique** : vous ne pouvez pas « apprendre » quelque chose à un modèle pendant une conversation au-delà de ce qui tient dans la fenêtre de contexte. Le modèle n'a pas de mémoire persistante entre deux appels (sauf si l'application la construit elle-même).
 
@@ -105,7 +105,7 @@ Deux grandes familles coexistent en 2026 :
 
 ## Inférence : les optimisations qui rendent le service abordable
 
-Faire tourner un LLM en production demande des optimisations, sinon le coût explose :
+Faire tourner un LLM en production demande des optimisations, sinon le coût explose (développé au chapitre 10) :
 
 - **Quantification** : les poids sont stockés en précision réduite (FP16, INT8, INT4, voire 1-2 bits). Un modèle de 70 milliards de paramètres tient ainsi sur 1-2 GPU au lieu de 4-8. Léger sacrifice de qualité, énorme gain de coût.
 - **Cache KV** : les étapes d'attention pour les tokens déjà traités sont mises en cache, évitant de les recalculer à chaque nouveau token.
