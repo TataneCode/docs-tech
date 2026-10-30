@@ -39,6 +39,10 @@ Comprendre ce qu'est un grand modèle de langage (LLM), comment il fonctionne et
 6. Chapitre 7 quand le modèle doit agir, pas seulement répondre.
 7. Chapitre 8 pour le choix du modèle, à relire régulièrement : ce chapitre date vite.
 
+## Export PDF
+
+À chaque pull request modifiant ce répertoire, le workflow [`pdf-llm-fondamentaux`](../../../.github/workflows/pdf-llm-fondamentaux.yml) concatène les chapitres 1 à 10 dans l'ordre numérique et génère un PDF (`llm-fondamentaux.pdf`), publié en artefact du run et signalé en commentaire de la PR.
+
 ## Pièges connus
 
 - **Les chapitres 1 à 7 et 9-10 sont stables** : les concepts évoluent lentement. Le chapitre 8, lui, reflète l'état du marché en octobre 2026 et doit être relu tous les 2-3 mois.
