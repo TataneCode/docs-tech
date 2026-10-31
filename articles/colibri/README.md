@@ -2,7 +2,7 @@
 
 > Catégorie : Guide d'installation
 
-**Date :** 2026-10-29
+**Date :** 2026-10-29 (affiné le 2026-10-31)
 **Statut :** Terminé
 
 ## Objectif
@@ -31,7 +31,7 @@ Critères retenus pour un laptop 32 Go de RAM, sans GPU dédié :
 
 - **Laptop pro (Windows + WSL)** ou **portable Linux Ubuntu**, 32 Go de RAM, SSD (512 Go ou 1 To)
 - ~19,4 Go d'espace disque pour le modèle + quelques Go pour le cache d'experts
-- `git`, Python 3.10+, un compilateur C (`gcc`/`clang` + OpenMP) ou le téléchargement du binaire précompilé
+- `git`, **Python 3.10+** (obligatoire : le launcher `coli` et la passerelle API sont des scripts Python), un compilateur C (`gcc`/`clang` + OpenMP) ou le téléchargement du binaire précompilé
 - Docker n'est **pas nécessaire** : colibri tourne en natif (WSL est du Linux natif). Docker n'est utile que pour isoler la passerelle API (voir `docker/README.md` upstream)
 - Optionnel : un GPU Vulkan (iGPU comprise — le setup active Vulkan pour Qwen3-Coder sur iGPU, mesuré plus rapide sur Qwen3.6)
 
@@ -53,6 +53,90 @@ Chaque token parcourt cinq étapes dans chaque couche : **route, union, place, o
 - **Apprentissage** : `.coli_usage` enregistre la chaleur de routage mesurée ; colibri devient plus rapide plus on l'utilise
 - **Spéculation** : têtes MTP (Multi-Token Prediction) sur les modèles qui en ont une (GLM-5.2, Qwen3.8-Flash-Next) ; Qwen3-Coder n'en a pas, sa vitesse vient de sa taille
 - **Fidélité** : chaque moteur est vérifié en CI contre l'implémentation de référence du modèle sur une fixture tiny
+
+## Installer la CLI `coli` (non native)
+
+`coli` n'est pas un binaire système livré par l'OS : c'est un **script Python** (`c/coli`, shebang `#!/usr/bin/env python3`) qui pilote les moteurs C compilés et la passerelle API. Sans Python 3.10+, rien ne démarre. Quatre façons de le rendre appelable depuis n'importe quel terminal, du plus simple au plus « propre » :
+
+### 1. Depuis le dépôt cloné (ce que fait le setup one-step)
+
+Après `git clone` + `./start-here.sh`, la CLI s'appelle **par son chemin** :
+
+```bash
+cd ~/colibri
+c/coli status        # ou ./c/coli status
+c/coli chat --model ~/colibri-models/<dossier>
+c/coli serve --model ~/colibri-models/<dossier> --cap 128
+```
+
+`start-here.sh` fait exactement `python3 c/coli setup "$@"` en interne. C'est suffisant tant qu'on travaille dans le dossier du dépôt, mais `coli` n'est alors pas dans le `PATH`.
+
+### 2. Lien symbolique dans `~/.local/bin` (recommandé, sans sudo)
+
+Rendre `coli` appelable de partout **sans rien installer system-wide** :
+
+```bash
+mkdir -p ~/.local/bin
+ln -s ~/colibri/c/coli ~/.local/bin/coli
+coli --version       # vérifie : affiche « colibri v2.0.0 »
+```
+
+`~/.local/bin` est dans le `PATH` par défaut sur Ubuntu/WSL. Le launcher se localise lui-même via `realpath(__file__)` : même à travers le lien, il retrouve `c/` (moteurs, `tools/`, modules Python) à côté de lui. **Ne pas copier** le script ailleurs : copié hors de `c/`, il chercherait les moteurs dans `../libexec/colibri` et échouerait.
+
+Sur **Windows natif**, l'équivalent est le lanceur `c\coli.cmd` (à appeler tel quel, ou à ajouter au `PATH`).
+
+### 3. Installation « propre » via `make install` (préfixe `/usr/local`)
+
+Après avoir compilé les moteurs (`make qwen36` dans `c/`, ou le setup one-step qui le fait) :
+
+```bash
+cd ~/colibri
+sudo make install        # PREFIX=/usr/local par défaut
+coli --version           # /usr/local/bin/coli est dans le PATH
+```
+
+Le Makefile (`c/Makefile`, `PREFIX ?= /usr/local`) installe alors :
+
+- `$(PREFIX)/bin/coli` — le launcher, dans le `PATH` ;
+- `$(PREFIX)/libexec/colibri/` — les 13 moteurs compilés (`colibri`, `qwen36`, `glm53`…), les modules Python (`openai_server.py`, `doctor.py`…) et `tools/`.
+
+Le launcher bascule automatiquement sur ce layout installé (il détecte l'absence de binaire à côté de lui et cherche dans `../libexec/colibri`). Un préfixe utilisateur évite le `sudo` : `make install PREFIX=~/.local` (`~/.local/bin` est dans le `PATH` par défaut sur Ubuntu).
+
+### 4. Via pip (`pip install -e .` depuis le dépôt)
+
+Le dépôt embarque un `pyproject.toml` (paquet `colibri-engine`) qui déclare un point d'entrée console `coli = "colibri.cli:main"` : un mince wrapper Python qui délègue à `c/coli`. Depuis un clone :
+
+```bash
+cd ~/colibri
+pip install -e .         # ou pipx install -e .
+coli --version
+```
+
+Utile dans un venv dédié ; à préférer au lien symbolique si vous gérez déjà vos outils Python avec pip/pipx.
+
+### Ordre conseillé avec le démarrage d'une instance Qwen3-Coder
+
+Le setup one-step (`./start-here.sh --model qwen3-coder-30b`) **démarre déjà** `coli serve` en arrière-plan (port 8000) à la fin de l'installation. Pour piloter ensuite cette instance depuis un autre terminal, il faut que `coli` soit dans le `PATH` — d'où l'intérêt de faire l'étape 2 (lien symbolique) **avant ou juste après** le premier `./start-here.sh` :
+
+```bash
+# 1. Clone
+git clone https://github.com/JustVugg/colibri
+cd colibri
+
+# 2. La CLI dans le PATH (une fois pour toutes)
+mkdir -p ~/.local/bin && ln -s "$PWD/c/coli" ~/.local/bin/coli
+coli --version
+
+# 3. Setup + démarrage de l'instance (Qwen3-Coder, 19,4 Go téléchargés)
+./start-here.sh --model qwen3-coder-30b
+
+# 4. Depuis un autre terminal : piloter l'instance
+coli status
+coli stop
+coli serve --model ~/colibri-models/<dossier> --cap 128 --port 8000   # relance manuelle
+```
+
+Récapitulatif : `./start-here.sh` fait le **premier** démarrage ; la CLI `coli` dans le `PATH` sert à **piloter** l'instance ensuite (`status`, `stop`, `logs`, relance manuelle de `serve`/`chat` avec d'autres options comme `--cap 128`).
 
 ## Les surfaces
 
@@ -91,7 +175,7 @@ Ce que fait le setup :
 4. **Télécharge le modèle** (19,4 Go, reprenable : `Ctrl+C`, relancer continue)
 5. **Démarre le serveur** et ouvre le dashboard : `http://127.0.0.1:8000/`
 
-Relancer ensuite : `./start-here.sh` démarre directement. `./start-here.sh --list` montre tous les modèles compatibles avec la machine. `coli status` / `coli stop` pour voir/arrêter.
+Relancer ensuite : `./start-here.sh` démarre directement. `./start-here.sh --list` montre tous les modèles compatibles avec la machine. `coli status` / `coli stop` pour voir/arrêter (avec `coli` rendu appelable partout, voir [Installer la CLI `coli`](#installer-la-cli-coli-non-native) ci-dessus).
 
 Vérification rapide :
 
@@ -338,6 +422,7 @@ Entrée image depuis `coli chat` (chemin collé dans le message), `coli web` (pi
 - **opencode + tool calling** : ne fonctionne que sur les moteurs qui le supportent (Qwen3.6/Coder, GLM-5.2/5.3-Flash, Kimi K3, MiMo-V2.6, DeepSeek V4, Qwen3.8 oui ; Inkling et OLMoE non) — cf. la matrice dans la doc upstream `docs/api.md`
 - **Vulkan sur glm53** : testé sur Lavapipe (Vulkan logiciel) pour la correction ; aucun GPU réel n'avait encore tourné les vrais poids upstream à la rédaction
 - **WSL** : garder le dossier du modèle sur le disque Linux (`~/colibri-models`), pas sous `/mnt/c` (beaucoup plus lent). Le setup le fait par défaut ; si le réseau WSL est lent, il propose `--via-windows`
+- **CLI `coli` « commande introuvable »** : `coli` n'est livré par aucun paquet système. Depuis un clone, appelez `c/coli ...` ou posez le lien `~/.local/bin/coli -> ~/colibri/c/coli` (ne copiez pas le script hors de `c/`, il ne retrouverait pas ses moteurs). Le setup one-step (`start-here.sh`) démarre le serveur tout seul ; la CLI dans le `PATH` sert surtout à piloter l'instance (`status`, `stop`, `logs`, relance manuelle)
 - **Docker** : inutile pour ce besoin — le natif (WSL) est plus simple et le conteneur colibri n'embarque pas le modèle de toute façon
 
 ## Références
@@ -354,6 +439,9 @@ Entrée image depuis `coli chat` (chemin collé dans le message), `coli web` (pi
 - [Benchmarks et protocole de mesure](https://github.com/JustVugg/colibri/blob/main/docs/benchmarks.md)
 - [API, matrice de tool calling et connexion des CLI/éditeurs](https://github.com/JustVugg/colibri/blob/main/docs/api.md)
 - [Guide Windows](https://github.com/JustVugg/colibri/blob/main/docs/windows.md) — build natif, START-HERE.bat
+- [Makefile upstream](https://github.com/JustVugg/colibri/blob/main/c/Makefile) — cible `install` (`PREFIX`, `BINDIR`, `LIBEXECDIR`) qui pose `coli` dans le `PATH`
+- [Launcher `c/coli`](https://github.com/JustVugg/colibri/blob/main/c/coli) — script Python pilote (layouts « dépôt cloné » et « installé » via `libexec`)
+- [Serveur MCP](https://github.com/JustVugg/colibri/blob/main/docs/MCP_SERVER.md) — « après `make install`, le launcher est sur le `PATH` et `coli mcp` suffit »
 - [Documentation opencode — providers](https://opencode.ai/docs/providers/) — provider personnalisé `@ai-sdk/openai-compatible`
 - [Documentation opencode — agents](https://opencode.ai/docs/agents/) — section `agent` de `opencode.json`
 - [Analyse : intérêt d'un fork en Rust](fork-rust.md)
