@@ -118,3 +118,10 @@ lsof -i :8080
 - [man bash](https://www.gnu.org/software/bash/manual/bash.html)
 - [GNU grep — documentation](https://www.gnu.org/software/grep/manual/grep.html)
 - [Coreutils (ls, cp, tee, sort, wc...)](https://www.gnu.org/software/coreutils/manual/)
+
+### Apprendre et pratiquer le shell (100 % gratuit, à suivre dans cet ordre)
+
+- [Linux Journey](https://linuxjourney.com/) — cours gratuits et progressifs pour apprendre Linux pas à pas : choix de la distribution, ligne de commande, navigation dans les fichiers, réseau, administration système.
+- [Terminus (jeu du MIT)](https://web.mit.edu/mprat/Public/web/Terminus/Web/main.html) — jeu d'aventure textuel jouable dans le navigateur où chaque action est une vraie commande shell (`ls`, `cd`, `cat`, `man`...) : les lieux du jeu sont des répertoires.
+- [Linux Survival](https://linuxsurvival.com/) — tutoriel interactif gratuit avec un terminal Linux simulé dans le navigateur (prompt `zoo>`) pour pratiquer la douzaine de commandes essentielles sans installer Linux.
+- [OverTheWire — Bandit](https://overthewire.org/wargames/bandit/) — wargame par niveaux (0 à 34) à jouer en SSH sur `bandit.labs.overthewire.org:2220`, conçu pour les grands débutants : chaque niveau fait découvrir des commandes et des fichiers Unix réels (mots de passe cachés, permissions, `grep`, `find`...).

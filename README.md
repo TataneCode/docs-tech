@@ -7,7 +7,7 @@ Documentation centralisée de sujets techniques divers : guides d'installation, 
 | Article | Catégorie | Description |
 |---------|-----------|-------------|
 | [Héberger des LLM légers avec LM Studio sur un ThinkPad T14 sous Ubuntu](articles/lm-studio-ubuntu/README.md) | Guide d'installation | Installation de LM Studio sur Ubuntu, choix de modèles Qwen pour 32 Go en CPU, serveur API local et déploiement Docker |
-| [Shell Linux — cheat sheet développeur](articles/linux-shell/README.md) | Cheat sheet | Commandes shell du quotidien : permissions, grep dans les logs, redirections, processus |
+| [Shell Linux — cheat sheet développeur](articles/linux/README.md) | Cheat sheet | Commandes shell du quotidien : permissions, grep dans les logs, redirections, processus |
 | [Vim — cheat sheet développeur](articles/vim/README.md) | Cheat sheet | Consulter et éditer fichiers et code : modes, navigation, édition, recherche, config minimale |
 | [llm-cli — skills, agents et commandes pour Gemini CLI et Vibe](llm-cli/README.md) | Cheat sheet | Boîte à outils personnelle : 20 skills portables, 7 personas Vibe, 8 commandes slash Gemini, synthèse de 6 dépôts sources |
 | [colibri — synthèse et mise en place d'un modèle de développement (Qwen3-Coder-30B-A3B)](articles/colibri/README.md) | Guide d'installation | Moteur d'inférence C pur pour modèles MoE sur matériel ordinaire : choix du modèle, installation sur Linux/WSL, connexion d'opencode, annexe GLM-5.3-Flash, analyse d'un fork Rust |
