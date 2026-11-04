@@ -110,7 +110,7 @@ Faire tourner un LLM en production demande des optimisations, sinon le coût exp
 - **Quantification** : les poids sont stockés en précision réduite (FP16, INT8, INT4, voire 1-2 bits). Un modèle de 70 milliards de paramètres tient ainsi sur 1-2 GPU au lieu de 4-8. Léger sacrifice de qualité, énorme gain de coût.
 - **Cache KV** : les étapes d'attention pour les tokens déjà traités sont mises en cache, évitant de les recalculer à chaque nouveau token.
 - **Batching continu** et **spéculative decoding** (un petit modèle « brouillon » propose plusieurs tokens, le grand modèle les vérifie en un seul passage) : accélèrent la génération.
-- **Serving local** : des moteurs comme llama.cpp, Ollama, vLLM ou LM Studio font tourner des modèles sur votre propre machine (voir l'article [LM Studio sur Ubuntu](../lm-studio-ubuntu/README.md)).
+- **Serving local** : des moteurs comme llama.cpp, Ollama, vLLM ou LM Studio font tourner des modèles sur votre propre machine (voir l'article [LM Studio sur Ubuntu](../lm-studio/README.md)).
 
 ## Pièges connus
 

@@ -83,7 +83,7 @@ Puisque chaque token exige un passage dans le réseau, on cherche à en produire
 |--------|----------|------------------|
 | API cloud (fournisseur) | OpenAI, Anthropic, Mistral, Google… | Zéro infra, paiement au token, données envoyées chez le fournisseur |
 | Serveur dédié open source | vLLM, SGLang, TensorRT-LLM | Fort débit, données chez soi, GPU dédié |
-| Sur votre machine (local) | llama.cpp, Ollama, LM Studio, MLX | Confidentialité, coût nul à l'usage, hors-ligne — voir l'article [LM Studio sur Ubuntu](../lm-studio-ubuntu/README.md) et le moteur [colibri](../colibri/README.md) |
+| Sur votre machine (local) | llama.cpp, Ollama, LM Studio, MLX | Confidentialité, coût nul à l'usage, hors-ligne — voir l'article [LM Studio sur Ubuntu](../lm-studio/README.md) et le moteur [colibri](../colibri/README.md) |
 | Navigateur / edge | WebGPU + transformers.js, MLX sur Mac | Applications légères, démo, confidentialité maximale |
 
 Coûts indicatifs (chapitre 8 pour le détail) : une API facturée au token revient à quelques centimes par million de tokens en entrée pour les modèles récents ; un GPU cloud coûte ~2-4 €/heure ; un modèle local sur votre propre machine ne coûte que l'électricité.

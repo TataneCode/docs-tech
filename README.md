@@ -6,7 +6,7 @@ Documentation centralisée de sujets techniques divers : guides d'installation, 
 
 | Article | Catégorie | Description |
 |---------|-----------|-------------|
-| [Héberger des LLM légers avec LM Studio sur un ThinkPad T14 sous Ubuntu](articles/lm-studio-ubuntu/README.md) | Guide d'installation | Installation de LM Studio sur Ubuntu, choix de modèles Qwen pour 32 Go en CPU, serveur API local et déploiement Docker |
+| [LM Studio — héberger des LLM en local sur Ubuntu (ThinkPad T14, 32 Go en CPU)](articles/lm-studio/README.md) | Guide d'installation | Installation de LM Studio sur Ubuntu, choix de modèles pour 32 Go en CPU (Qwen3 8B, Gemma 4 12B, Gemma 2 9B abliterated), catalogue des modèles abliterated, téléchargement sans Hugging Face (miroirs, transit par drive), serveur API local, usage agentique avec OpenCode et déploiement Docker |
 | [Shell Linux — cheat sheet développeur](articles/linux/README.md) | Cheat sheet | Commandes shell du quotidien : permissions, grep dans les logs, redirections, processus |
 | [Vim — cheat sheet développeur](articles/vim/README.md) | Cheat sheet | Consulter et éditer fichiers et code : modes, navigation, édition, recherche, config minimale |
 | [llm-cli — skills, agents et commandes pour Gemini CLI et Vibe](llm-cli/README.md) | Cheat sheet | Boîte à outils personnelle : 20 skills portables, 7 personas Vibe, 8 commandes slash Gemini, synthèse de 6 dépôts sources |

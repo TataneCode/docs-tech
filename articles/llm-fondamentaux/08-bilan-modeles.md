@@ -112,6 +112,6 @@ Disposer d'un panorama à jour des principaux modèles de LLM (fermés et open w
 - [LMSys Chatbot Arena](https://chat.lmsys.org/) — préférences utilisateurs (Elo)
 - [Hugging Face — Open LLM Leaderboard](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard)
 - [Hugging Face — modèles](https://huggingface.co/models) — poids, licences, quantifications
-- [LM Studio sur Ubuntu (article local)](../lm-studio-ubuntu/README.md) — faire tourner des modèles open weights en local
+- [LM Studio sur Ubuntu (article local)](../lm-studio/README.md) — faire tourner des modèles open weights en local
 - [colibri (article local)](../colibri/README.md) — moteur d'inférence pour grands modèles MoE sur matériel ordinaire
 - [FreeLLMAPI (article local)](../freellmapi/README.md) — agréger les free tiers de fournisseurs LLM derrière une API unifiée
