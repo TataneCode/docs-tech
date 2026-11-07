@@ -19,7 +19,7 @@ Trois leviers, trois périmètres. La question n'est pas « lequel est le meille
 | Le modèle doit adopter un **style, un format, un comportement** très spécifique | **Fine-tuning** (souvent LoRA) | Le comportement est appris dans les poids |
 | Le modèle doit raisonner mieux sur **votre domaine** (juridique, médical, code interne) | **Fine-tuning** + RAG combinés | Les deux : connaissances (RAG) + comportement (fine-tuning) |
 | Réduire le coût en tokens | Prompt engineering + RAG ciblé | Moins de contexte = moins de tokens |
-| Données sensibles, pas de fuite vers un fournisseur | Modèle local + RAG local | Voir chapitre 8 et l'article [LM Studio](../lm-studio-ubuntu/README.md) |
+| Données sensibles, pas de fuite vers un fournisseur | Modèle local + RAG local | Voir chapitre 8 et l'article [LM Studio](../lm-studio/README.md) |
 
 **Règle d'or** : essayer dans l'ordre prompt → RAG → fine-tuning. Chaque étape coûte plus cher que la précédente en temps, en infrastructure et en maintenance.
 
@@ -198,7 +198,7 @@ La qualité des données prime sur la quantité (chapitre 2) :
 ### Héberger et servir un modèle fine-tuné
 
 - **Via API fournisseur** : la plupart (OpenAI, Mistral, Together, Fireworks…) permettent d'uploader un fine-tune. Le plus simple.
-- **En local** : merger les poids LoRA avec le modèle de base, puis servir avec vLLM, Ollama ou llama.cpp (voir [LM Studio](../lm-studio-ubuntu/README.md) et [colibri](../colibri/README.md)).
+- **En local** : merger les poids LoRA avec le modèle de base, puis servir avec vLLM, Ollama ou llama.cpp (voir [LM Studio](../lm-studio/README.md) et [colibri](../colibri/README.md)).
 
 ## Combiner RAG + fine-tuning + prompt engineering
 
