@@ -7,6 +7,7 @@ on:
     paths:
       - "articles.md"
       - "articles/**"
+      - ".github/workflows/epub-articles.yml"
 
 permissions:
   contents: read
