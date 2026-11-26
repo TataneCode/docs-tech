@@ -1,0 +1,48 @@
+name: EPUB de tous les articles
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "articles.md"
+      - "articles/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: epub-articles-main
+  cancel-in-progress: true
+
+jobs:
+  epub:
+    name: Convertit articles.md en EPUB avec pandoc
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupère le dépôt
+        uses: actions/checkout@v4
+
+      - name: Installe pandoc
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends pandoc
+
+      - name: Génère l'EPUB (un chapitre par titre H1)
+        run: |
+          pandoc articles.md \
+            --from markdown \
+            --to epub \
+            --output articles.epub \
+            --metadata title="Docs tech — tous les articles" \
+            --metadata lang=fr \
+            --toc \
+            --epub-chapter-level=1
+          ls -lh articles.epub
+
+      - name: Publie l'EPUB en artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: articles-epub
+          path: articles.epub
+          retention-days: 90
