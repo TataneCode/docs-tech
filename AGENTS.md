@@ -17,6 +17,7 @@ Exemples de sujets couverts : installation de GLM Studio, cheat sheet DIMM (mém
 ```
 README.md                     # Accueil + sommaire central (tableau)
 AGENTS.md                     # Ce contexte projet
+articles.md                   # Tous les articles de `articles/` concaténés en un seul fichier (export liseuse)
 _templates/article-template.md
 articles/<sujet>/README.md    # Un dossier par article
 skills/<skill>/SKILL.md        # Skills du projet (voir ci-dessous)

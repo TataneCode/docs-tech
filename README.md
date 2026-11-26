@@ -23,6 +23,7 @@ Documentation centralisée de sujets techniques divers : guides d'installation, 
 docs-tech/
 ├── README.md            # Ce fichier : accueil et sommaire
 ├── AGENTS.md            # Contexte projet
+├── articles.md          # Tous les articles de `articles/` concaténés en un seul fichier (liseuse)
 ├── _templates/          # Templates à copier pour un nouvel article
 ├── articles/            # Un dossier par sujet
 │   └── <sujet>/README.md
